@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PracticesController < ApplicationController
+class PracticesController < OpenReadController
   before_action :set_practice, only: %i[show update destroy]
 
   # GET /practices
@@ -17,7 +17,7 @@ class PracticesController < ApplicationController
 
   # POST /practices
   def create
-    @practice = Practice.new(practice_params)
+    @practice = current_user.practices.build(practice_params)
 
     if @practice.save
       render json: @practice, status: :created, location: @practice
@@ -44,11 +44,11 @@ class PracticesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_practice
-    @practice = Practice.find(params[:id])
+    @practice = current_user.Practice.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
   def practice_params
-    params.require(:practice).permit(:date, :start_time, :duration, :instrument)
+    params.require(:practice).permit(:date, :start_time, :duration, :instrument, :user_id)
   end
 end
