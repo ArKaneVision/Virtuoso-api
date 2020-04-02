@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class PracticesController < OpenReadController
+class PracticesController < ProtectedController
   before_action :set_practice, only: %i[show update destroy]
 
   # GET /practices
   def index
-    @practices = Practice.all
+    @practices = current_user.practices.all
 
     render json: @practices
   end
@@ -44,7 +44,7 @@ class PracticesController < OpenReadController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_practice
-    @practice = current_user.Practice.find(params[:id])
+    @practice = current_user.practices.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
